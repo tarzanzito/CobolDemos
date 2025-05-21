@@ -1,0 +1,3 @@
+cobc FunctionNumGames.cob
+
+cobc -x CallFunction.cob

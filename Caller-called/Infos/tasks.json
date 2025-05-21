@@ -1,0 +1,62 @@
+{
+
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "gnucobol (main)",
+            "type": "shell",
+            "command": "cobc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "args": [
+                "${file}",
+                "-x",
+                "-I",
+                "${workspaceFolder}\\cpy",
+                "-o",
+                "${workspaceFolder}\\exe\\${fileBasenameNoExtension}"
+            ],
+            "problemMatcher": [
+                "$gnucobol3-cobc",
+                "$gnucobol3-error-cobc",
+                "$gnucobol3-note-cobc",
+                "$gnucobol3-warning-cobc"
+            ],
+            "detail": "tsc -p ./"
+        },
+        {
+            "label": "gnucobol (called)",
+            "type": "shell",
+            "command": "cobc",
+            "group": "build",
+            "args": [
+                "${file}",
+                "-I",
+                "${workspaceFolder}\\cpy",
+                "-o",
+                "${workspaceFolder}\\exe\\${fileBasenameNoExtension}"
+            ],
+            "problemMatcher": [
+                "$gnucobol3-cobc",
+                "$gnucobol3-error-cobc",
+                "$gnucobol3-note-cobc",
+                "$gnucobol3-warning-cobc"
+            ],
+            "detail": "tsc -p ./"
+        },
+        {
+           "label": "gnucobol (run)",
+           "type": "shell",
+           "command": "exe/${fileBasenameNoExtension}",
+//           "detail": "tsc -p ./exe",
+           "detail": "tsc -p exe",
+           "problemMatcher": [],
+           "group": {
+               "kind": "test", 
+               "isDefault": true
+           }
+       }
+    ]
+}

@@ -1,0 +1,6 @@
+rem ******************************************************************
+rem List all Cobol Intrinsics Function
+rem cobc --list-intrinsics
+rem ******************************************************************
+
+cobc -x CallIntrinsicFunction.cob

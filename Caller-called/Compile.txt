@@ -1,0 +1,12 @@
+
+rem Called.cob
+
+cobc -o bin\Called.dll -std=default -Wall Called.cob
+or
+cobc -o bin\Called.dll -std=default -Wall -debug Called.cob
+
+rem Caller.cob
+
+cobc -x -o bin\Caller.exe -std=default -Wall Caller.cob
+or
+cobc -x -o bin\Caller.exe -std=default -Wall -debug Caller.cob
