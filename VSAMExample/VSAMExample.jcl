@@ -1,0 +1,13 @@
+DEFINEVS JOB (ACCT),'DEFINE VSAM', 
+             NOTIFY=&SYSUID 
+STEP1    EXEC PGM=IDCAMS 
+SYSPRINT DD SYSOUT=   
+SYSIN    DD  
+  DEFINE CLUSTER (NAME(YOUR.VSAM.FILE)  
+                  INDEXED  
+                  RECORDSIZE(80 80)  
+                  KEYS(10 0)  
+                  FREESPACE(10 10)) 
+  DATA (NAME(YOUR.VSAM.FILE.DATA)) 
+  INDEX (NAME(YOUR.VSAM.FILE.INDEX)) 
+ 

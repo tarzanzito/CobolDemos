@@ -10,3 +10,20 @@ rem Caller.cob
 cobc -x -o bin\Caller.exe -std=default -Wall Caller.cob
 or
 cobc -x -o bin\Caller.exe -std=default -Wall -debug Caller.cob
+
+
+
+-Wall
+Enable all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning).
+The list of warning flags turned on by this option is shown in --help.
+
+-Wextra, -W
+Enable every possible warning that is not dialect specific. This includes more information than -Wall would normally provide.
+(This option used to be called -W. The older name is still supported, but the newer name is more descriptive.)
+
+-F, --free
+use free source format (alias for -fformat=free)
+
+
+--debug, -d
+Enable all run-time error checks.
