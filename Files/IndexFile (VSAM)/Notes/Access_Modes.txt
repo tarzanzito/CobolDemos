@@ -1,0 +1,39 @@
+
+ORGANIZATION IS INDEXED 
+ORGANIZATION IS Relative
+ORGANIZATION IS Sequential 
+ORGANIZATION IS Line-sequential 
+
+
+ACCESS MODE IS DYNAMIC
+ACCESS MODE IS RANDOM 	  
+ACCESS MODE IS SEQUENTIAL 
+
+
+ACCESS MODE IS SEQUENTIAL
+-------------------------
+Can be specified in all formats.
+Format 1: sequential
+Records in the file are accessed in the sequence established when the file is created or extended. Format 1 supports only sequential access.
+Format 2: indexed
+Records in the file are accessed in the sequence of ascending record key values according to the collating sequence of the file.
+Format 3: relative
+Records in the file are accessed in the ascending sequence of relative record numbers of existing records in the file.
+Format 4: line-sequential
+Records in the file are accessed in the sequence established when the file is created or extended. Format 4 supports only sequential access.
+
+ACCESS MODE IS DYNAMIC
+----------------------
+Can be specified in formats 2 and 3 only.
+Format 2: indexed
+Records in the file can be accessed sequentially or randomly, depending on the form of the specific input-output statement used.
+Format 3: relative
+Records in the file can be accessed sequentially or randomly, depending on the form of the specific input-output request.
+
+ACCESS MODE IS RANDOM
+---------------------
+Can be specified in formats 2 and 3 only.
+Format 2: indexed
+The value placed in a record key data item specifies the record to be accessed.
+Format 3: relative
+The value placed in a relative key data item specifies the record to be accessed.

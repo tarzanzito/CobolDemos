@@ -1,5 +1,5 @@
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. VSAM-Read.
+       PROGRAM-ID. VSAM-Read2.
 
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
@@ -34,17 +34,27 @@
            OPEN Input VSAM-FILE 
 		   
 		   DISPLAY "FILE STATUS=" WS-FILE-STATUS.
-           IF WS-FILE-STATUS = '00' 
-               PERFORM READ-RECORD UNTIL WS-EOF = "Y" 
-           END-IF 
+
+ 
+           perform READ-RECORD-NEXT. 
+           perform READ-RECORD-NEXT. 
+           perform READ-RECORD-NEXT. 
+           perform READ-RECORD-NEXT. 
+           perform READ-RECORD-PREVIOUS. 
+           perform READ-RECORD-PREVIOUS. 
+
+      *     IF WS-FILE-STATUS = '00' 
+      *         PERFORM READ-RECORD-NEXT UNTIL WS-EOF = "Y" 
+      *     END-IF 
            CLOSE VSAM-FILE 
 		   
            STOP RUN. 
 
-       READ-RECORD. 
+       READ-RECORD-NEXT. 
 			
-           READ VSAM-FILE 
+           READ VSAM-FILE NEXT
                INTO VSAM-RECORD 
+                
                AT END MOVE "Y" TO WS-EOF
            END-READ.
 
@@ -52,8 +62,21 @@
                DISPLAY 'Record read: ' KEY-FIELD ':' DATA-FIELD 
            END-If.
 		   
-      *   Display "STATUS=" WS-FILE-STATUS.
+         Display "NEXT STATUS=" WS-FILE-STATUS.
 
+       READ-RECORD-PREVIOUS. 
+			
+           READ VSAM-FILE PREVIOUS
+               INTO VSAM-RECORD 
+                
+               AT END MOVE "Y" TO WS-EOF
+           END-READ.
+
+		   IF WS-EOF = "N"
+               DISPLAY 'Record read: ' KEY-FIELD ':' DATA-FIELD 
+           END-If.
+		   
+         Display "PREV STATUS=" WS-FILE-STATUS.
        
 	   READ-RECORD-B. 
 			

@@ -1,0 +1,130 @@
+FD F001-FILE
+RECORD IS VARYING IN SIZE
+DEPENDING ON WI-F001-RECORD-SIZE
+RECORDING MODE IS V.      <-----------------              
+01 F001-RECORD.
+03 F001-TYPE PIC X(04).
+etc
+
+WORKING-STORAGE SECTION.
+01 WI-F001-RECORD-SIZE PIC 9(04) COMP.
+01 WW-F001-RECORD-SIZE PIC 9(04).
+\END-CODE
+
+
+
+
+  IDENTIFICATION DIVISION.                       
+   PROGRAM-ID. TDCBLALC.                          
+   ENVIRONMENT DIVISION.                          
+   INPUT-OUTPUT SECTION.                          
+   FILE-CONTROL.                                  
+       SELECT KOVETZ-SPOOL 
+              ASSIGN TO OTFILE       
+              ORGANIZATION IS SEQUENTIAL               
+              FILE STATUS IS SW-END.                   
+
+   DATA DIVISION.                                 
+   FILE SECTION.                                  
+   FD  KOVETZ-SPOOL                               
+       LABEL RECORD IS STANDARD                                     
+       RECORD IS VARYING IN SIZE FROM 1 TO 32600  
+       DEPENDING ON ORECH-S                       
+       RECORDING MODE IS V.                       
+   01  RESHUMAT-SPOOL             PIC X(32600).
+
+   WORKING-STORAGE SECTION.
+   01  ORECH-S           PIC 9(8) COMP.     
+   01 I                  PIC S9(4) VALUE 0. 
+   01 SW-END PIC X(02).                     
+   01 FN PIC X(44).                         
+   01 WS-ALLOC-STRING PIC X(100).           
+   01 PGM PIC X(08) VALUE 'BPXWDYN'.        
+
+   PROCEDURE DIVISION.        
+       MOVE 'LYTO.SPOOL.PISD0735.T1401803.M001.D1191030' TO FN.
+       STRING 'ALLOC DD(OTFILE) DSN(' FN ') SHR REUSE '        
+              ' UNIT(TAPE) '                                   
+                   DELIMITED BY SIZE                                       
+         INTO WS-ALLOC-STRING                                   
+       END-STRING.   
+       DISPLAY ' WS-ALLOC-STRING *' WS-ALLOC-STRING '*'        
+       CALL PGM USING WS-ALLOC-STRING.                         
+       DISPLAY RETURN-CODE.                                    
+       OPEN INPUT KOVETZ-SPOOL                                 
+       READ KOVETZ-SPOOL                                       
+           AT END MOVE 1 TO SW-END                            
+       END-READ   
+
+       PERFORM UNTIL SW-END = 1 OR I > 100                   
+           ADD 1 TO I                                       
+           DISPLAY 'ORECH-S=' ORECH-S                       
+           DISPLAY 'RESHUMAT-SPOOL=' RESHUMAT-SPOOL(1:100)  
+           READ KOVETZ-SPOOL                               
+             AT END MOVE 1 TO SW-END                       
+           END-READ                                        
+       END-PERFORM                                           
+
+       CLOSE KOVETZ-SPOOL                                   
+
+       GOBACK.
+
+
+
+
+
+ IDENTIFICATION DIVISION.                                    
+   PROGRAM-ID. TDCBLALC.                                       
+   ENVIRONMENT DIVISION.                                       
+   INPUT-OUTPUT SECTION.                                       
+   FILE-CONTROL.                                               
+       SELECT KOVETZ-SPOOL ASSIGN TO OTFILE                    
+         ORGANIZATION IS SEQUENTIAL                            
+         ACCESS  MODE IS SEQUENTIAL                            
+         FILE STATUS IS SW-END.                                
+   DATA DIVISION.                                              
+   FILE SECTION.                                               
+   FD  KOVETZ-SPOOL                                            
+       LABEL RECORD IS STANDARD       <-----------------------------                         
+       RECORD IS VARYING IN SIZE FROM 1 TO 12600               
+       DEPENDING ON ORECH-S                                    
+       RECORDING MODE IS V.           <-----------------------------                          
+    01  RESHUMAT-SPOOL             PIC X(12600).               
+   WORKING-STORAGE SECTION.                                    
+    01  ORECH-S           PIC 9(8) COMP.                       
+    01 I                  PIC S9(4) VALUE 0.                   
+    01 SW-END PIC 99.                                          
+    01 FN PIC X(44).                                           
+    01 WS-ALLOC-STRING PIC X(100).                             
+    01 PGM PIC X(08) VALUE 'BPXWDYN'.                          
+   PROCEDURE DIVISION.                                         
+       MOVE 'LYTO.SPOOL.PISD0735.T1401803.M001.D1191030' TO FN.
+       STRING 'ALLOC DD(OTFILE) DSN(' DELIMITED BY SIZE          
+              FN DELIMITED BY SPACE                              
+              ') SHR REUSE '                                     
+              ' UNIT(TAPE) '                                     
+               DELIMITED BY SIZE                                 
+        INTO WS-ALLOC-STRING                                     
+       END-STRING.                                               
+       DISPLAY ' WS-ALLOC-STRING *' WS-ALLOC-STRING '*'          
+       CALL PGM USING WS-ALLOC-STRING.                           
+       DISPLAY 'ALLOC RC='RETURN-CODE.                           
+       OPEN INPUT KOVETZ-SPOOL                                   
+       DISPLAY 'OPEN RC='RETURN-CODE.                            
+       MOVE 00 TO SW-END                                         
+       READ KOVETZ-SPOOL                                         
+            AT END MOVE 1 TO SW-END                              
+       END-READ                                                  
+       DISPLAY 'READ RC='RETURN-CODE' SW-END='SW-END             
+
+       PERFORM UNTIL SW-END = 1 OR I > 100                       
+            ADD 1 TO I                                           
+            DISPLAY 'ORECH-S=' ORECH-S                           
+            DISPLAY 'RESHUMAT-SPOOL=' RESHUMAT-SPOOL(1:100)      
+             READ KOVETZ-SPOOL                                   
+               AT END MOVE 1 TO SW-END                           
+             END-READ                                            
+            DISPLAY 'READ RC='RETURN-CODE' SW-END='SW-END        
+       END-PERFORM           
+
+        CLOSE KOVETZ-SPOOL  
